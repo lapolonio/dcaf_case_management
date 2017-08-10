@@ -3,7 +3,12 @@ Rails.application.routes.draw do
     root to: 'dashboards#index', as: :authenticated_root
     get 'dashboard', to: 'dashboards#index', as: 'dashboard'
     get 'reports', to: 'reports#index', as: 'reports'
+    get 'reports/:id', to: 'reports#show', as: 'reports_show'
     post 'search', to: 'dashboards#search', defaults: { format: :js }
+
+    scope :ujs, defaults: { format: :ujs } do
+      patch 'report_totals' => 'reports#totals'
+    end
 
     # User routes behind the authentication wall
     patch 'users/reorder_call_list', to: 'users#reorder_call_list', as: 'reorder_call_list', defaults: { format: :js }
@@ -34,7 +39,7 @@ Rails.application.routes.draw do
                 only: [ :create, :update, :destroy ]
     end
 
-    get 'reports/:timeframe', to: 'reports#report', as: 'patients_report'
+    # get 'reports/:timeframe', to: 'reports#report', as: 'patients_report'
 
     get 'patients/:patient_id/submit_pledge', to: 'patients#pledge', as: 'submit_pledge'
 
